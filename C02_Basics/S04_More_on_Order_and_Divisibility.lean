@@ -12,14 +12,24 @@ variable (a b c d : ℝ)
 
 example : min a b = min b a := by
   apply le_antisymm
-  · show min a b ≤ min b a
-    apply le_min
-    · apply min_le_right
-    apply min_le_left
-  · show min b a ≤ min a b
-    apply le_min
-    · apply min_le_right
-    apply min_le_left
+  apply le_min
+  apply min_le_right
+  apply min_le_left
+
+  apply le_min
+  apply min_le_right
+  apply min_le_left
+
+
+  -- apply le_antisymm
+  -- · show min a b ≤ min b a
+  --   apply le_min
+  --   · apply min_le_right
+  --   apply min_le_left
+  -- · show min b a ≤ min a b
+  --   apply le_min
+  --   · apply min_le_right
+  --   apply min_le_left
 
 example : min a b = min b a := by
   have h : ∀ x y : ℝ, min x y ≤ min y x := by
@@ -38,8 +48,32 @@ example : min a b = min b a := by
     apply min_le_right
     apply min_le_left
 
+
+theorem max_ge_ele (a b : ℝ) : max a b ≥ a := by
+  cases le_or_lt a b
+  case inl h =>
+    rw [max_def, if_pos h]
+    apply h
+  case inr h =>
+    have h' : a > b := by
+      apply h
+
+
+
 example : max a b = max b a := by
-  sorry
+  apply le_antisymm
+  cases le_or_lt a b
+  case a.inl h =>
+    calc
+      max a b ≥ b :=
+
+
+
+
+
+
+
+
 example : min (min a b) c = min a (min b c) := by
   sorry
 theorem aux : min a b + c ≤ min (a + c) (b + c) := by
@@ -80,5 +114,3 @@ variable (m n : ℕ)
 example : Nat.gcd m n = Nat.gcd n m := by
   sorry
 end
-
-

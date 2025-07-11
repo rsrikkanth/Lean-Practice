@@ -142,11 +142,36 @@ example : 2 * a * b ≤ a ^ 2 + b ^ 2 := by
     _ ≥ 0 := by apply pow_two_nonneg
   linarith
 
+theorem AmGm (a b : ℝ) : a * b ≤ ((a + b) / 2)^2 := by
+  calc
+    a * b = ((a + b) / 2)^2 - ((a - b) / 2)^2 := by ring
+    _ ≤ ((a + b) / 2)^2 := by
+      apply sub_le_self
+      have h: ((a-b) / 2)^2 ≥ 0 := by
+        apply pow_two_nonneg
+      apply h
+
 example : |a * b| ≤ (a ^ 2 + b ^ 2) / 2 := by
   apply abs_le'.mpr
-  have h₁ : a * b ≤ (a ^ 2 + b ^ 2) / 2 := by
-    sorry
-  have h₂ : -(a * b) ≤ (a ^ 2 + b ^ 2) / 2 := by
-    sorry
-  apply h₁ ∧ h₂
+  constructor
+  . calc
+      a * b = (a^2 + b^2) / 2 - ((a - b))^2 / 2 := by ring
+      _ ≤ (a^2 + b^2) / 2 := by
+        apply sub_le_self
+        have h: ((a - b) ^ 2) / 2 ≥ 0 := by
+          apply div_nonneg
+          apply pow_two_nonneg
+          apply zero_le_two
+        apply h
+  -- . have h₁: 0 ≤ a ^ 2 - 2 * a * b + b ^ 2
+  --   calc
+  --     a ^ 2 - 2 * a * b + b ^ 2 = (a - b) ^ 2 := by ring
+  --     _ ≥ 0 := by apply pow_two_nonneg
+  --   linarith
+  . have h₂: 0 ≤ a ^ 2 + 2 * a * b + b ^ 2
+    calc
+      a ^ 2 + 2 * a * b + b ^ 2 = (a + b) ^ 2 := by ring
+      _ ≥ 0 := by apply pow_two_nonneg
+    linarith
+
 #check abs_le'.mpr
